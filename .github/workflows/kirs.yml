@@ -1,15 +1,22 @@
 name: KIRS Crawl
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: '0 15 * * *'   # 한국시간 자정 매일
+  workflow_dispatch:         # 수동 실행 버튼
+
 jobs:
   crawl:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install axios cheerio
-      - run: node update-kirs.js
+      - name: Install dependencies
+        run: npm install axios cheerio
+      - name: Run KIRS crawler
+        run: node update-kirs.js
         env:
           GAS_URL: ${{ secrets.GAS_URL }}
