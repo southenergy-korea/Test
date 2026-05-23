@@ -1,0 +1,15 @@
+name: KIRS Crawl
+on:
+  workflow_dispatch:
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install axios cheerio
+      - run: node update-kirs.js
+        env:
+          GAS_URL: ${{ secrets.GAS_URL }}
